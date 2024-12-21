@@ -12,6 +12,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/asset-tracker", assetTracker);
 
+app.get("/", (req, res) => {
+  res.status(200).json("Welcome, your app is working well");
+});
+
 app.listen(port, () => {
   console.log(`This app is listening on port ${port}`);
 });
