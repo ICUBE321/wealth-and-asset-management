@@ -1,7 +1,6 @@
 // asset tracker router
 const express = require("express");
 const Asset = require("./assetModel");
-
 const router = express.Router();
 
 // routes
@@ -13,7 +12,8 @@ router.get("/all", async (req, res) => {
     console.log(`List of returned assets ${assets}`);
     res.status(200).json(assets);
   } catch (error) {
-    console.log(`assetTracker - Get All Assets error: ${error}`);
+    console.log(`assetTracker - Get All Assets error: ${error.message}`);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
