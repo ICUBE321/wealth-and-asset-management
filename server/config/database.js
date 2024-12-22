@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 let connected = false;
 
 const connectDB = async () => {
+  console.log("Connecting to the database...");
   mongoose.set("strictQuery", true);
 
   // if the database is already connected, don't connect again
@@ -17,7 +18,7 @@ const connectDB = async () => {
     connected = true;
     console.log("MongoDB connected...");
   } catch (error) {
-    console.log(error);
+    console.log(`Error connecting Mongodb ${error}`);
   }
 };
 

@@ -9,6 +9,7 @@ const router = express.Router();
 // get all assets
 router.get("/all", async (req, res) => {
   try {
+    console.log("Retrieving all user assets...");
     await connectDB();
     const assets = await Asset.find({});
     console.log(`List of returned assets ${assets}`);
