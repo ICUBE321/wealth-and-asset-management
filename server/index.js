@@ -10,7 +10,7 @@ const port = process.env.PORT || 3000;
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use("/asset-tracker", assetTracker);
+app.use("/assettracker", assetTracker);
 
 app.get("/", (req, res) => {
   res.status(200).json("Welcome, your app is working well");
