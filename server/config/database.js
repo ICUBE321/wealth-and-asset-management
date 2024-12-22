@@ -14,7 +14,11 @@ const connectDB = async () => {
 
   //connect to mongodb
   try {
-    await mongoose.connect(process.env.MONGODB_URI);
+    const mongodbUri = process.env.MONGODB_URI;
+    console.log(
+      mongodbUri ? "Mongo DB URI not empty" : "Mongo DB Uri is empty"
+    );
+    await mongoose.connect(mongodbUri);
     connected = true;
     console.log("MongoDB connected...");
   } catch (error) {
