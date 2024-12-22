@@ -2,11 +2,17 @@
 require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
+const helmet = require("helmet");
+const cors = require("cors");
 const connectToDatabase = require("./config/db");
 const assetTracker = require("./asset-tracker/assetTracker");
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+// Security and middleware
+app.use(helmet());
+app.use(cors());
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true }));
 

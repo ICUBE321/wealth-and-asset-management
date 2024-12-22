@@ -1,18 +1,31 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
+
 const UserAssets = () => {
-  const assets = [
-    {
-      name: "Penthouse",
-      type: "Real Estate",
-      value: "$50000",
-      quantity: 2,
-    },
-    {
-      name: "Stock A",
-      type: "Stock",
-      value: "$1000",
-      quantity: 3,
-    },
-  ];
+  const [assets, setAssets] = useState([]);
+
+  // to ensure all assets are retrieved on first render
+  useEffect(() => {
+    // retrieve the list of assets
+    const getAllAssets = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/assettracker/all"
+        );
+        setAssets(response.data);
+      } catch (error) {
+        console.log(`Error retrieving all assets: ${error}`);
+      }
+    };
+
+    getAllAssets();
+  }, []);
+
+  // capitalize the first letter of a string
+  const capitalize = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
+
   return (
     <div className="rounded-lg bg-slate-200 m-4 p-5">
       <h1 className="mb-4 text-xl font-bold text-gray-900">Your Assets</h1>
@@ -27,12 +40,12 @@ const UserAssets = () => {
             </tr>
           </thead>
           <tbody>
-            {assets.length > 0 &&
-              assets.map((asset) => (
-                <tr className="border-b">
-                  <th>{asset.name}</th>
-                  <td>{asset.type}</td>
-                  <td>{asset.value}</td>
+            {assets?.length > 0 &&
+              assets.map((asset, index) => (
+                <tr key={index} className="border-b">
+                  <th>{capitalize(asset.name)}</th>
+                  <td>{capitalize(asset.type)}</td>
+                  <td>${asset.value}</td>
                   <td>{asset.quantity}</td>
                 </tr>
               ))}
