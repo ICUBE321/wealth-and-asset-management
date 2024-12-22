@@ -1,7 +1,6 @@
 // asset tracker router
 const express = require("express");
 const Asset = require("./assetModel");
-const connectDB = require("../config/database");
 
 const router = express.Router();
 
@@ -10,7 +9,6 @@ const router = express.Router();
 router.get("/all", async (req, res) => {
   try {
     console.log("Retrieving all user assets...");
-    await connectDB();
     const assets = await Asset.find({});
     console.log(`List of returned assets ${assets}`);
     res.status(200).json(assets);
@@ -22,7 +20,6 @@ router.get("/all", async (req, res) => {
 // add new asset
 router.post("/", async (req, res) => {
   try {
-    await connectDB();
     const { name, type, value, quantity } = req.body;
 
     const asset = new Asset({
@@ -44,7 +41,6 @@ router.post("/", async (req, res) => {
 // modify asset details
 router.post("/update", async (req, res) => {
   try {
-    await connectDB();
     const assetID = req.body.id;
     const newAsset = {
       name: req.body.name,
@@ -65,7 +61,6 @@ router.post("/update", async (req, res) => {
 // remove an asset
 router.delete("/", async (req, res) => {
   try {
-    await connectDB();
     const assetID = req.body.id;
     const deletedAsset = await Asset.deleteOne({ _id: assetID });
     console.log(`deleted asset: ${JSON.stringify(deletedAsset)}`);
