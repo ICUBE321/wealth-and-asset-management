@@ -1,26 +1,6 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { TiDelete } from "react-icons/ti";
 
-const UserAssets = () => {
-  const [assets, setAssets] = useState([]);
-
-  // to ensure all assets are retrieved on first render
-  useEffect(() => {
-    // retrieve the list of assets
-    const getAllAssets = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:3000/assettracker/all"
-        );
-        setAssets(response.data);
-      } catch (error) {
-        console.log(`Error retrieving all assets: ${error}`);
-      }
-    };
-
-    getAllAssets();
-  }, []);
-
+const UserAssets = ({ assets, setShowModal, setSelectedAsset }) => {
   // capitalize the first letter of a string
   const capitalize = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -37,6 +17,7 @@ const UserAssets = () => {
               <th>Type</th>
               <th>Value</th>
               <th>Quantity</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -47,6 +28,16 @@ const UserAssets = () => {
                   <td>{capitalize(asset.type)}</td>
                   <td>${asset.value}</td>
                   <td>{asset.quantity}</td>
+                  <td>
+                    <TiDelete
+                      className="text-red-600 hover:text-red-800"
+                      onClick={() => {
+                        console.log("show modal");
+                        setSelectedAsset(asset._id);
+                        setShowModal(true);
+                      }}
+                    />
+                  </td>
                 </tr>
               ))}
           </tbody>
