@@ -1,9 +1,16 @@
-import { TiDelete } from "react-icons/ti";
+import EditableRow from "./EditableRow";
 
-const UserAssets = ({ assets, setShowModal, setSelectedAsset }) => {
-  // capitalize the first letter of a string
-  const capitalize = (string) => {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+const UserAssets = ({
+  assets,
+  setShowModal,
+  setSelectedAsset,
+  refreshAllAssets,
+}) => {
+  //show delete modal
+  const openDeleteModal = (asset) => {
+    console.log("show delete modal");
+    setSelectedAsset(asset._id);
+    setShowModal(true);
   };
 
   return (
@@ -23,22 +30,12 @@ const UserAssets = ({ assets, setShowModal, setSelectedAsset }) => {
           <tbody>
             {assets?.length > 0 &&
               assets.map((asset, index) => (
-                <tr key={index} className="border-b">
-                  <th>{capitalize(asset.name)}</th>
-                  <td>{capitalize(asset.type)}</td>
-                  <td>${asset.value}</td>
-                  <td>{asset.quantity}</td>
-                  <td>
-                    <TiDelete
-                      className="text-red-600 hover:text-red-800"
-                      onClick={() => {
-                        console.log("show modal");
-                        setSelectedAsset(asset._id);
-                        setShowModal(true);
-                      }}
-                    />
-                  </td>
-                </tr>
+                <EditableRow
+                  asset={asset}
+                  index={index}
+                  openDeleteModal={openDeleteModal}
+                  refreshAllAssets={refreshAllAssets}
+                />
               ))}
           </tbody>
         </table>

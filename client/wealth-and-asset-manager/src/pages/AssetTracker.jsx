@@ -1,7 +1,7 @@
 import UserAssets from "../components/UserAssets";
 import AddAsset from "../components/AddAsset";
-import Modal from "../components/Modal";
 import { useEffect, useState } from "react";
+import Modal from "../components/Modal";
 import axios from "axios";
 
 const AssetTracker = () => {
@@ -10,22 +10,22 @@ const AssetTracker = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState("");
 
+  // for retrieving all assets
+  const refreshAllAssets = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:3000/assettracker/all"
+      );
+      console.log("AssetTracker - Retrieved all assets");
+      setAssets(response.data);
+    } catch (error) {
+      console.log(`AssetTracker - Error retrieving all assets: ${error}`);
+    }
+  };
+
   // to ensure all assets are retrieved on first render
   useEffect(() => {
-    // retrieve the list of assets
-    const getAllAssets = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:3000/assettracker/all"
-        );
-        console.log("AssetTracker - Retrieved all assets:");
-        setAssets(response.data);
-      } catch (error) {
-        console.log(`AssetTracker - Error retrieving all assets: ${error}`);
-      }
-    };
-
-    getAllAssets();
+    refreshAllAssets();
   }, [inputs]);
 
   // function to delete an asset
@@ -39,7 +39,7 @@ const AssetTracker = () => {
     } catch (error) {
       console.log(`AssetTracker - Error deletting assets: ${error}`);
     }
-    setShowModal(false);
+    setShowDeleteModal(false);
     //force render
     setInputs({});
   };
@@ -50,6 +50,7 @@ const AssetTracker = () => {
         assets={assets}
         setShowModal={setShowModal}
         setSelectedAsset={setSelectedAsset}
+        refreshAllAssets={refreshAllAssets}
       />
       <AddAsset inputs={inputs} setInputs={setInputs} />
       <Modal
