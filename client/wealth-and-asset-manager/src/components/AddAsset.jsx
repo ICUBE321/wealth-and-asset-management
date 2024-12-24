@@ -12,7 +12,7 @@ const AddAsset = ({ inputs, setInputs }) => {
     console.log(inputs);
     try {
       const response = await axios.post(
-        "http://localhost:3000/assettracker/",
+        `${import.meta.env.VITE_SERVER_API}/assettracker/`,
         inputs
       );
       console.log(`AddAsset - Added new asset`);

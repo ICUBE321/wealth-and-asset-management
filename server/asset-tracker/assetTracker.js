@@ -59,12 +59,14 @@ router.post("/update", async (req, res) => {
 });
 
 // remove an asset
-router.delete("/", async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
-    const assetID = req.body.id;
+    const assetID = req.params["id"];
+    console.log(`Deleteing asset: ${assetID}`);
     const deletedAsset = await Asset.deleteOne({ _id: assetID });
     console.log(`deleted asset: ${JSON.stringify(deletedAsset)}`);
     res.status(200).json(deletedAsset);
+    // res.status(200).json("Deleted Asset");
   } catch (error) {
     console.log(`assetTracker - Delete Asset error: ${error}`);
   }

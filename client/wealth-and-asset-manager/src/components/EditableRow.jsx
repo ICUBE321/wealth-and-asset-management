@@ -45,7 +45,7 @@ const EditableRow = ({ asset, index, openDeleteModal, refreshAllAssets }) => {
       console.log("Updating Asset...");
       // console.log(currentAsset);
       const response = await axios.post(
-        "http://localhost:3000/assettracker/update",
+        `${import.meta.env.VITE_SERVER_API}/assettracker/update`,
         currentAsset
       );
       console.log("EditableRow - Updated asset");

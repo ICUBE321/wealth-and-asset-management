@@ -14,7 +14,7 @@ const AssetTracker = () => {
   const refreshAllAssets = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:3000/assettracker/all"
+        `${import.meta.env.VITE_SERVER_API}/assettracker/all`
       );
       console.log("AssetTracker - Retrieved all assets");
       setAssets(response.data);
@@ -33,13 +33,13 @@ const AssetTracker = () => {
     console.log(`AssetTracker - Deleting asset ${selectedAsset}`);
     try {
       const response = await axios.delete(
-        `http://localhost:3000/assettracker/${selectedAsset}`
+        `${import.meta.env.VITE_SERVER_API}/assettracker/${selectedAsset}`
       );
       console.log(response.data);
     } catch (error) {
       console.log(`AssetTracker - Error deletting assets: ${error}`);
     }
-    setShowDeleteModal(false);
+    setShowModal(false);
     //force render
     setInputs({});
   };

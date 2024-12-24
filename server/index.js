@@ -12,7 +12,12 @@ const port = process.env.PORT || 3000;
 
 // Security and middleware
 app.use(helmet());
-app.use(cors());
+app.use(
+  cors({
+    origin: "*", // Allow requests from this origin
+    methods: ["GET", "POST", "PUT", "DELETE"], // Specify allowed methods
+  })
+);
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true }));
 
