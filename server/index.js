@@ -6,6 +6,7 @@ const helmet = require("helmet");
 const cors = require("cors");
 const connectToDatabase = require("./config/db");
 const assetTracker = require("./asset-tracker/assetTracker");
+const Logs = require("./logsUtil/logs");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -24,6 +25,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // connect to database
 const mongoDbUri = process.env.MONGODB_URI;
 connectToDatabase(mongoDbUri);
+
+app.use("/logs", Logs);
 
 app.use("/assettracker", assetTracker);
 

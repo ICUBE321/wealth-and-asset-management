@@ -1,6 +1,10 @@
 import axios from "axios";
+import Log from "../utility/Logs";
 
 const AddAsset = ({ inputs, setInputs }) => {
+  const origin = "AddAsset";
+  let logMessage = "";
+
   const handleChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
@@ -10,6 +14,8 @@ const AddAsset = ({ inputs, setInputs }) => {
   const submitAsset = async (event) => {
     event.preventDefault();
     console.log(inputs);
+    logMessage = JSON.stringify(inputs);
+    Log(origin, logMessage);
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_SERVER_API}/assettracker/`,
@@ -17,10 +23,14 @@ const AddAsset = ({ inputs, setInputs }) => {
       );
       console.log(`AddAsset - Added new asset`);
       console.log(response.data);
+      logMessage = "Added new asset";
+      Log(origin, logMessage);
       // forcing a render to retrieve the added asset and clear form
       setInputs({});
     } catch (error) {
       console.log(`AddAsset - Error adding new asset: ${error}`);
+      logMessage = `Error adding new asset: ${error}`;
+      Log(origin, logMessage);
     }
   };
 

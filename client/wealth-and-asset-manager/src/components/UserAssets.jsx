@@ -1,4 +1,5 @@
 import EditableRow from "./EditableRow";
+import Log from "../utility/Logs";
 
 const UserAssets = ({
   assets,
@@ -6,9 +7,14 @@ const UserAssets = ({
   setSelectedAsset,
   refreshAllAssets,
 }) => {
+  const origin = "UserAssets";
+  let logMessage = "";
+
   //show delete modal
   const openDeleteModal = (asset) => {
     console.log("show delete modal");
+    logMessage = "Show delete modal";
+    Log(origin, logMessage);
     setSelectedAsset(asset._id);
     setShowModal(true);
   };

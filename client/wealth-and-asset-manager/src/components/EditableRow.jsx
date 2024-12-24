@@ -3,8 +3,12 @@ import { MdEditNote } from "react-icons/md";
 import { BiSolidCloudUpload } from "react-icons/bi";
 import { useState } from "react";
 import axios from "axios";
+import Log from "../utility/Logs";
 
 const EditableRow = ({ asset, index, openDeleteModal, refreshAllAssets }) => {
+  const origin = "EditableRow";
+  let logMessage = "";
+
   const [editing, setEditing] = useState(false);
   const [currentAsset, setCurrentAsset] = useState({
     id: asset._id,
@@ -43,18 +47,22 @@ const EditableRow = ({ asset, index, openDeleteModal, refreshAllAssets }) => {
   const updateAsset = async () => {
     try {
       console.log("Updating Asset...");
-      // console.log(currentAsset);
+      logMessage = "Updating Asset...";
+      Log(origin, logMessage);
       const response = await axios.post(
         `${import.meta.env.VITE_SERVER_API}/assettracker/update`,
         currentAsset
       );
       console.log("EditableRow - Updated asset");
-      console.log(response.data);
+      logMessage = "Updated asset";
+      Log(origin, logMessage);
       cancelEdit();
       // need to force a re-render
       refreshAllAssets();
     } catch (error) {
       console.log(`EditableRow - Error updating asset: ${error}`);
+      logMessage = `Error updating asset: ${error}`;
+      Log(origin, logMessage);
     }
   };
 
