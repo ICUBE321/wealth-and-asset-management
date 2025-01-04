@@ -1,5 +1,6 @@
 // asset database model
 const mongoose = require("mongoose");
+const idType = mongoose.Schema.Types.ObjectId;
 
 const AssetSchema = new mongoose.Schema({
   name: {
@@ -14,9 +15,9 @@ const AssetSchema = new mongoose.Schema({
   value: {
     type: Number,
   },
-  quantity: {
-    type: Number,
-    min: 0,
+  userId: {
+    type: idType,
+    required: true,
   },
 });
 

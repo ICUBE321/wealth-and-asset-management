@@ -6,6 +6,7 @@ const UserAssets = ({
   setShowModal,
   setSelectedAsset,
   refreshAllAssets,
+  userId,
 }) => {
   const origin = "UserAssets";
   let logMessage = "";
@@ -20,33 +21,34 @@ const UserAssets = ({
   };
 
   return (
-    <div className="rounded-lg bg-slate-200 m-4 p-5">
-      <h1 className="mb-4 text-xl font-bold text-gray-900">Your Assets</h1>
+    <section className="mb-8 bg-white p-6 rounded-lg shadow-md">
+      <h2 className="text-lg font-semibold text-gray-800 mb-4">Your Assets</h2>
       <div className="relative overflow-x-auto bg-gray-50 rounded-lg p-2.5">
-        <table className="w-full text-left text-gray-500">
-          <thead className="text-gray-700 bg-gray-100 py-5">
-            <tr>
-              <th>Name</th>
-              <th>Type</th>
-              <th>Value</th>
-              <th>Quantity</th>
+        <table className="table-auto w-full text-left">
+          <thead className="text-gray-700 py-5">
+            <tr className="">
+              <th className="">Name</th>
+              <th className="">Type</th>
+              <th className="">Value</th>
               <th></th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="text-gray-500">
             {assets?.length > 0 &&
               assets.map((asset, index) => (
                 <EditableRow
+                  key={index}
                   asset={asset}
                   index={index}
                   openDeleteModal={openDeleteModal}
                   refreshAllAssets={refreshAllAssets}
+                  userId={userId}
                 />
               ))}
           </tbody>
         </table>
       </div>
-    </div>
+    </section>
   );
 };
 

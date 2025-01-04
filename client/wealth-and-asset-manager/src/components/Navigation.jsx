@@ -2,7 +2,7 @@ import Logo from "../assets/logo.jpg";
 import { Navbar } from "flowbite-react";
 import { NavLink } from "react-router-dom";
 
-const Navigation = () => {
+const Navigation = ({ tokenExists }) => {
   return (
     <>
       <Navbar className="" fluid rounded>
@@ -18,14 +18,33 @@ const Navigation = () => {
         </Navbar.Brand>
         <Navbar.Toggle />
         <Navbar.Collapse>
+          {!tokenExists && (
+            <>
+              <Navbar.Link as={NavLink} to="/login">
+                Login
+              </Navbar.Link>
+              <Navbar.Link as={NavLink} to="/signup">
+                Sign Up
+              </Navbar.Link>
+            </>
+          )}
+
           <Navbar.Link as={NavLink} to="/">
             Home
           </Navbar.Link>
-          <Navbar.Link as={NavLink} to="/asset-tracker">
-            Track Assets
-          </Navbar.Link>
-          <Navbar.Link as={NavLink}>Monitor Growth</Navbar.Link>
-          <Navbar.Link as={NavLink}>Generate Insights</Navbar.Link>
+          {tokenExists && (
+            <>
+              <Navbar.Link as={NavLink} to="/asset-tracker">
+                Track Assets
+              </Navbar.Link>
+              <Navbar.Link as={NavLink} to="/monitor-growth">
+                Monitor Growth
+              </Navbar.Link>
+              <Navbar.Link as={NavLink} to="/logout">
+                Logout
+              </Navbar.Link>
+            </>
+          )}
         </Navbar.Collapse>
       </Navbar>
     </>

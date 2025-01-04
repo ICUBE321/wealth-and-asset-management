@@ -5,7 +5,9 @@ const bodyParser = require("body-parser");
 const helmet = require("helmet");
 const cors = require("cors");
 const connectToDatabase = require("./config/db");
+const userAuth = require("./user-auth/userAuth");
 const assetTracker = require("./asset-tracker/assetTracker");
+const monitorGrowth = require("./monitor-growth/monitorGrowth");
 const Logs = require("./logsUtil/logs");
 
 const app = express();
@@ -28,7 +30,11 @@ connectToDatabase(mongoDbUri);
 
 app.use("/logs", Logs);
 
+app.use("/userAuth", userAuth);
+
 app.use("/assettracker", assetTracker);
+
+app.use("/monitorGrowth", monitorGrowth);
 
 app.get("/", (req, res) => {
   res.status(200).json("Welcome, your app is working well");

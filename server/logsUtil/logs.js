@@ -12,10 +12,10 @@ router.post("/", async (req, res) => {
         console.log(err);
       } else {
         // Get the file contents after the append operation
-        console.log(
-          "\nFile Contents of file after append:",
-          fs.readFileSync(`./logs/${logFile}.log`, "utf8")
-        );
+        // console.log(
+        //   "\nFile Contents of file after append:",
+        //   fs.readFileSync(`./logs/${logFile}.log`, "utf8")
+        // );
       }
     });
     res.json({ message: "Logged ok" });

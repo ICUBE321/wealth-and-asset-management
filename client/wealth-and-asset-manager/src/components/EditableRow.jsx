@@ -5,7 +5,13 @@ import { useState } from "react";
 import axios from "axios";
 import Log from "../utility/Logs";
 
-const EditableRow = ({ asset, index, openDeleteModal, refreshAllAssets }) => {
+const EditableRow = ({
+  asset,
+  index,
+  openDeleteModal,
+  refreshAllAssets,
+  userId,
+}) => {
   const origin = "EditableRow";
   let logMessage = "";
 
@@ -15,7 +21,6 @@ const EditableRow = ({ asset, index, openDeleteModal, refreshAllAssets }) => {
     name: asset.name,
     type: asset.type,
     value: asset.value,
-    quantity: asset.quantity,
   });
 
   // capitalize the first letter of a string
@@ -51,18 +56,18 @@ const EditableRow = ({ asset, index, openDeleteModal, refreshAllAssets }) => {
       Log(origin, logMessage);
       const response = await axios.post(
         `${import.meta.env.VITE_SERVER_API}/assettracker/update`,
-        currentAsset
+        { inputs: currentAsset, userId }
       );
-      console.log("EditableRow - Updated asset");
-      logMessage = "Updated asset";
+      logMessage = `Updated asset - ${response.data}`;
       Log(origin, logMessage);
+      console.log(`${origin} - ${logMessage}`);
       cancelEdit();
       // need to force a re-render
       refreshAllAssets();
     } catch (error) {
-      console.log(`EditableRow - Error updating asset: ${error}`);
       logMessage = `Error updating asset: ${error}`;
       Log(origin, logMessage);
+      console.log(`${origin} - ${logMessage}`);
     }
   };
 
@@ -105,19 +110,6 @@ const EditableRow = ({ asset, index, openDeleteModal, refreshAllAssets }) => {
           />
         ) : (
           `$${asset.value}`
-        )}
-      </td>
-      <td>
-        {editing ? (
-          <input
-            className="rounded-md p-0 m-0"
-            type="number"
-            name="quantity"
-            value={currentAsset.quantity}
-            onChange={(event) => handleChange(event)}
-          />
-        ) : (
-          asset.quantity
         )}
       </td>
       <td>

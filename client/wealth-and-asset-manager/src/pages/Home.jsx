@@ -12,23 +12,37 @@ import {
   YAxis,
   Line,
 } from "recharts";
+import randomColor from "randomcolor";
+import { useEffect, useState } from "react";
 
-const Home = () => {
-  const assetAllocationData = [
-    { name: "Stocks", value: 500 },
-    { name: "Cash", value: 500 },
-    { name: "Real Estate", value: 500 },
-    { name: "Other", value: 2000 },
+const Home = ({ tokenExists, assets, totalAssetValue, portfolioGrowth }) => {
+  //distinct asset types for the user
+  const distinctAssetTypes = [
+    ...new Set(assets.map((asset) => asset.type?.toLowerCase())),
   ];
 
-  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+  const [totalByType, setTotalByType] = useState(0);
+  const [selectedAssetType, setSelectedAssetType] = useState(
+    distinctAssetTypes[0]
+  ); // initialize to the user's first asset type
 
-  const growthOverTime = [
-    { month: "Jan", value: 1000 },
-    { month: "Mar", value: 4000 },
-    { month: "June", value: 8000 },
-    { month: "Nov", value: 10000 },
-  ];
+  //for setting total portfolio value by asset type
+  const handleSelectedTypeChange = (e) => {
+    const type = e.target.value;
+    setSelectedAssetType(type);
+  };
+
+  // to ensure the total by type is calculated after the type is changed
+  useEffect(() => {
+    // get total for this type
+    let sum = 0;
+    assets?.forEach((asset) => {
+      if (asset?.type?.toLowerCase() == selectedAssetType?.toLowerCase()) {
+        sum += asset?.value;
+      }
+    });
+    setTotalByType(sum);
+  }, [selectedAssetType]);
 
   return (
     <div>
@@ -76,96 +90,115 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Portfolio Overview */}
-      <section className="bg-blue-600 text-white py-16">
-        <div className="text-center">
-          <h2 className="text-4xl font-bold">Overview of Your Portfolio</h2>
-          <div className="max-w-6xl mx-auto grid grid-cols-1 gap-8 p-6">
-            <div className="">
-              <p className="text-lg">Total Wealth Value</p>
-              <p className="">$2,000</p>
+      {tokenExists && (
+        <>
+          {/* Portfolio Overview */}
+          <section className="bg-blue-600 text-white py-16">
+            <div className="text-center">
+              <h2 className="text-4xl font-bold">Overview of Your Portfolio</h2>
+              <div className="max-w-6xl mx-auto grid grid-cols-1 gap-8 p-6">
+                <div className="">
+                  <p className="text-lg">Total Wealth Value</p>
+                  <p className="">${totalAssetValue}</p>
+                </div>
+                <div className="">
+                  <p className="text-lg">
+                    Total Wealth Value by Asset Type
+                    <select
+                      value={selectedAssetType}
+                      onChange={handleSelectedTypeChange}
+                      id="asset types"
+                      className="ml-3 p-0 py-1 text-lg bg-transparent border-0 border-b-2 border-gray-200 appearance-none focus:outline-none focus:ring-0 focus:border-gray-200 peer"
+                    >
+                      {distinctAssetTypes.map((assetType, index) => (
+                        <option key={index}>{assetType}</option>
+                      ))}
+                    </select>
+                  </p>
+                  <p className="mt-2">${totalByType}</p>
+                </div>
+              </div>
             </div>
-            <div className="">
-              <p className="text-lg">
-                Total Wealth Value by Asset Type
-                <select
-                  id="asset types"
-                  className="ml-3 p-0 py-1 text-lg bg-transparent border-0 border-b-2 border-gray-200 appearance-none focus:outline-none focus:ring-0 focus:border-gray-200 peer"
-                >
-                  <option>stocks</option>
-                  <option>cash</option>
-                  <option>real estate</option>
-                </select>
-              </p>
-              <p className="mt-2">$500</p>
-            </div>
-          </div>
-        </div>
-      </section>
+          </section>
 
-      {/* Asset Allocation charts */}
-      <section className="py-16">
-        <div className="text-center grid grid-cols-1 gap-8">
-          <div className="mx-4 rounded-lg shadow-lg">
-            <h2 className="text-4xl font-bold text-blue-600">
-              Asset Allocation
-            </h2>
-            <div className="h-96 w-full">
-              <ResponsiveContainer>
-                <PieChart>
-                  <Pie
-                    data={assetAllocationData}
-                    cx="50%"
-                    cy="50%"
-                    label
-                    dataKey="value"
-                    fill="#8884d8"
-                  >
-                    {assetAllocationData.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={COLORS[index % COLORS.length]}
+          {/* Asset Allocation charts */}
+          <section className="py-16">
+            <div className="text-center grid grid-cols-1 gap-8">
+              <div className="mx-4 rounded-lg shadow-lg">
+                <h2 className="text-4xl font-bold text-blue-600">
+                  Asset Allocation
+                </h2>
+                <div className="h-96 w-full">
+                  <ResponsiveContainer>
+                    <PieChart>
+                      <Pie
+                        data={assets}
+                        cx="50%"
+                        cy="50%"
+                        label
+                        dataKey="value"
+                        fill="#8884d8"
+                      >
+                        {assets?.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={randomColor()} />
+                        ))}
+                      </Pie>
+                      <Tooltip />
+                      <Legend />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+              <div className="mx-4 rounded-lg shadow-lg">
+                <h2 className="text-4xl font-bold text-blue-600">
+                  Portfolio Growth
+                </h2>
+                <div className="h-64 w-full">
+                  <ResponsiveContainer>
+                    <LineChart
+                      data={portfolioGrowth}
+                      margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="month" />
+                      <YAxis />
+                      <Tooltip />
+                      <Legend />
+                      <Line
+                        type={"monotone"}
+                        dataKey={"portfolioValue"}
+                        stroke="#82ca9d"
                       />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                  <Legend />
-                </PieChart>
-              </ResponsiveContainer>
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
             </div>
-          </div>
-          <div className="mx-4 rounded-lg shadow-lg">
-            <h2 className="text-4xl font-bold text-blue-600">
-              Portfolio Growth
-            </h2>
-            <div className="h-64 w-full">
-              <ResponsiveContainer>
-                <LineChart
-                  data={growthOverTime}
-                  margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Line type={"monotone"} dataKey={"value"} stroke="#82ca9d" />
-                </LineChart>
-              </ResponsiveContainer>
+          </section>
+
+          <section className="py-16">
+            <div className="mx-4 rounded-lg shadow-lg p-2">
+              <h2 className="text-2xl font-bold text-blue-600">
+                Recent Activity
+              </h2>
+              <p className="text-blue-600">
+                Latest updates or changes in asset values
+              </p>
             </div>
-          </div>
-        </div>
-      </section>
+          </section>
 
-      <Card className="rounded-md bg-gray-400 m-2 p-2">
-        <h2 className="text-2xl font-bold">Recent Activity</h2>
-        <p>Latest updates or changes in asset values</p>
-      </Card>
-
-      <Card className="rounded-md bg-gray-400 m-2 p-2 col-span-2">
-        <h2 className="text-2xl font-bold">API Data Highlights</h2>
-        <p>Real-time updates of stock prices or market trends</p>
-      </Card>
+          <section className="py-16">
+            <div className="mx-4 rounded-lg shadow-lg p-2 ">
+              <h2 className="text-2xl font-bold text-blue-600">
+                API Data Highlights
+              </h2>
+              <p className="text-blue-600">
+                Real-time updates of stock prices or market trends
+              </p>
+            </div>
+          </section>
+        </>
+      )}
 
       {/* Footer */}
       <footer className="bg-gray-800 text-gray-300 py-8">
