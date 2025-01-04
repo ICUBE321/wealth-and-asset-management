@@ -12,6 +12,7 @@ import MonitorGrowth from "./pages/MonitorGrowth";
 import Log from "./utility/Logs";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import FooterComponent from "./components/Footer";
 
 function App() {
   const { token, setToken, removeToken } = useToken();
@@ -78,41 +79,47 @@ function App() {
   }, [assets]);
 
   return (
-    <>
+    <div className="flex flex-col min-h-screen">
       <Navigation tokenExists={token} />
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <Home
-              tokenExists={token}
-              assets={assets}
-              totalAssetValue={totalAssetValue}
-              portfolioGrowth={portfolioGrowth}
-            />
-          }
-        />
-        <Route path="/login" element={<Login setToken={setToken} />} />
-        <Route path="/signup" element={<SignUp setToken={setToken} />} />
-        <Route
-          path="/asset-tracker"
-          element={
-            <AssetTracker
-              userId={userId}
-              assets={assets}
-              refreshAllAssets={refreshAllAssets}
-              totalAssetValue={totalAssetValue}
-            />
-          }
-        />
-        <Route
-          path="/monitor-growth"
-          element={<MonitorGrowth portfolioGrowth={portfolioGrowth} />}
-        />
-        <Route path="/logout" element={<Logout removeToken={removeToken} />} />
-        <Route path="*" element={<NoMatch />} />
-      </Routes>
-    </>
+      <main className="flex-grow">
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <Home
+                tokenExists={token}
+                assets={assets}
+                totalAssetValue={totalAssetValue}
+                portfolioGrowth={portfolioGrowth}
+              />
+            }
+          />
+          <Route path="/login" element={<Login setToken={setToken} />} />
+          <Route path="/signup" element={<SignUp setToken={setToken} />} />
+          <Route
+            path="/asset-tracker"
+            element={
+              <AssetTracker
+                userId={userId}
+                assets={assets}
+                refreshAllAssets={refreshAllAssets}
+                totalAssetValue={totalAssetValue}
+              />
+            }
+          />
+          <Route
+            path="/monitor-growth"
+            element={<MonitorGrowth portfolioGrowth={portfolioGrowth} />}
+          />
+          <Route
+            path="/logout"
+            element={<Logout removeToken={removeToken} />}
+          />
+          <Route path="*" element={<NoMatch />} />
+        </Routes>
+      </main>
+      <FooterComponent />
+    </div>
   );
 }
 

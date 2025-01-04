@@ -199,13 +199,6 @@ const Home = ({ tokenExists, assets, totalAssetValue, portfolioGrowth }) => {
           </section>
         </>
       )}
-
-      {/* Footer */}
-      <footer className="bg-gray-800 text-gray-300 py-8">
-        <div className="max-w-6xl mx-auto text-center">
-          <p>© 2025 Wealth Manager. All rights reserved.</p>
-        </div>
-      </footer>
     </div>
   );
 };
