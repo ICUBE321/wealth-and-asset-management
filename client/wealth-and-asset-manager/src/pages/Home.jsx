@@ -149,29 +149,35 @@ const Home = ({ tokenExists, assets, totalAssetValue, portfolioGrowth }) => {
                   </ResponsiveContainer>
                 </div>
               </div>
-              <div className="mx-4 rounded-lg shadow-lg">
+              <div className="mx-4 rounded-lg shadow-lg p-2">
                 <h2 className="text-4xl font-bold text-blue-600">
                   Portfolio Growth
                 </h2>
-                <div className="h-64 w-full">
-                  <ResponsiveContainer>
-                    <LineChart
-                      data={portfolioGrowth}
-                      margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="month" />
-                      <YAxis />
-                      <Tooltip />
-                      <Legend />
-                      <Line
-                        type={"monotone"}
-                        dataKey={"portfolioValue"}
-                        stroke="#82ca9d"
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
+                {portfolioGrowth.length > 0 ? (
+                  <div className="h-64 w-full">
+                    <ResponsiveContainer>
+                      <LineChart
+                        data={portfolioGrowth}
+                        margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                      >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="month" />
+                        <YAxis />
+                        <Tooltip />
+                        <Legend />
+                        <Line
+                          type={"monotone"}
+                          dataKey={"portfolioValue"}
+                          stroke="#82ca9d"
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
+                ) : (
+                  <p className=" text-gray-600 mt-4 text-lg">
+                    No portfolio history to show yet.
+                  </p>
+                )}
               </div>
             </div>
           </section>
@@ -181,18 +187,18 @@ const Home = ({ tokenExists, assets, totalAssetValue, portfolioGrowth }) => {
               <h2 className="text-2xl font-bold text-blue-600">
                 Recent Activity
               </h2>
-              <p className="text-blue-600">
+              <p className=" text-gray-600 mt-4 text-lg">
                 Latest updates or changes in asset values
               </p>
             </div>
           </section>
 
           <section className="py-16">
-            <div className="mx-4 rounded-lg shadow-lg p-2 ">
+            <div className="mx-4 rounded-lg shadow-lg p-2">
               <h2 className="text-2xl font-bold text-blue-600">
                 API Data Highlights
               </h2>
-              <p className="text-blue-600">
+              <p className=" text-gray-600 mt-4 text-lg">
                 Real-time updates of stock prices or market trends
               </p>
             </div>

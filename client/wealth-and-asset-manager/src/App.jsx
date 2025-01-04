@@ -53,7 +53,7 @@ function App() {
       logMessage = "Retrieved all growth values";
       Log(origin, logMessage);
       console.log(`${origin} - ${logMessage}`);
-      // console.log(response.data);
+      console.log(`protfolio growth: ${response.data}`);
       setPortfolioGrowth(response.data);
     } catch (error) {
       logMessage = `Error retrieving growth values: ${error}`;
