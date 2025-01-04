@@ -1,4 +1,3 @@
-import { Card } from "flowbite-react";
 import {
   PieChart,
   Pie,
@@ -14,8 +13,10 @@ import {
 } from "recharts";
 import randomColor from "randomcolor";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Home = ({ tokenExists, assets, totalAssetValue, portfolioGrowth }) => {
+  const navigate = useNavigate();
   //distinct asset types for the user
   const distinctAssetTypes = [
     ...new Set(assets.map((asset) => asset.type?.toLowerCase())),
@@ -54,9 +55,14 @@ const Home = ({ tokenExists, assets, totalAssetValue, portfolioGrowth }) => {
             Track your portfolio, optimize your investments, and achieve your
             financial goals.
           </p>
-          <button className="mt-6 px-6 py-3 bg-white text-blue-600 font-semibold rounded-lg shadow-md hover:bg-gray-100">
-            Get Started
-          </button>
+          {!tokenExists && (
+            <button
+              onClick={() => navigate("/login")}
+              className="mt-6 px-6 py-3 bg-white text-blue-600 font-semibold rounded-lg shadow-md hover:bg-gray-100"
+            >
+              Get Started
+            </button>
+          )}
         </div>
       </section>
 
@@ -65,18 +71,18 @@ const Home = ({ tokenExists, assets, totalAssetValue, portfolioGrowth }) => {
         <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="bg-white shadow-lg rounded-lg p-6">
             <h3 className="text-xl font-semibold text-blue-600">
-              Portfolio Overview
+              Asset Overview
             </h3>
             <p className="mt-2 text-gray-600">
-              View your asset allocation and performance at a glance.
+              View your asset allocation at a glance.
             </p>
           </div>
           <div className="bg-white shadow-lg rounded-lg p-6">
             <h3 className="text-xl font-semibold text-blue-600">
-              Insights & Analytics
+              Monitor Growth
             </h3>
             <p className="mt-2 text-gray-600">
-              Get actionable insights into your investments.
+              Get a clear look at your portfolio performance over time.
             </p>
           </div>
           <div className="bg-white shadow-lg rounded-lg p-6">
@@ -92,10 +98,10 @@ const Home = ({ tokenExists, assets, totalAssetValue, portfolioGrowth }) => {
 
       {tokenExists && (
         <>
-          {/* Portfolio Overview */}
+          {/* Asset Overview */}
           <section className="bg-blue-600 text-white py-16">
             <div className="text-center">
-              <h2 className="text-4xl font-bold">Overview of Your Portfolio</h2>
+              <h2 className="text-4xl font-bold">Overview of Your Assets</h2>
               <div className="max-w-6xl mx-auto grid grid-cols-1 gap-8 p-6">
                 <div className="">
                   <p className="text-lg">Total Wealth Value</p>
@@ -188,7 +194,7 @@ const Home = ({ tokenExists, assets, totalAssetValue, portfolioGrowth }) => {
                 Recent Activity
               </h2>
               <p className=" text-gray-600 mt-4 text-lg">
-                Latest updates or changes in asset values
+                Latest updates or changes in asset values (Coming soon.)
               </p>
             </div>
           </section>
@@ -199,7 +205,8 @@ const Home = ({ tokenExists, assets, totalAssetValue, portfolioGrowth }) => {
                 API Data Highlights
               </h2>
               <p className=" text-gray-600 mt-4 text-lg">
-                Real-time updates of stock prices or market trends
+                Real-time updates of stock prices or market trends (Coming
+                soon.)
               </p>
             </div>
           </section>
