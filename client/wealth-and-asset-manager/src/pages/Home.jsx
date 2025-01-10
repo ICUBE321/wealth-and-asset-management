@@ -48,53 +48,57 @@ const Home = ({ tokenExists, assets, totalAssetValue, portfolioGrowth }) => {
   return (
     <div>
       {/* Hero Section */}
-      <section className="bg-blue-600 text-white py-20">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold">Manage Your Wealth with Ease</h2>
-          <p className="mt-4 text-lg">
-            Track your portfolio, optimize your investments, and achieve your
-            financial goals.
-          </p>
-          {!tokenExists && (
-            <button
-              onClick={() => navigate("/login")}
-              className="mt-6 px-6 py-3 bg-white text-blue-600 font-semibold rounded-lg shadow-md hover:bg-gray-100"
-            >
-              Get Started
-            </button>
-          )}
-        </div>
-      </section>
+      {!tokenExists && (
+        <section className="bg-blue-600 text-white py-20">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-4xl font-bold">Manage Your Wealth with Ease</h2>
+            <p className="mt-4 text-lg">
+              Track your portfolio, optimize your investments, and achieve your
+              financial goals.
+            </p>
+            {!tokenExists && (
+              <button
+                onClick={() => navigate("/login")}
+                className="mt-6 px-6 py-3 bg-white text-blue-600 font-semibold rounded-lg shadow-md hover:bg-gray-100"
+              >
+                Get Started
+              </button>
+            )}
+          </div>
+        </section>
+      )}
 
       {/* Features Section */}
-      <section className="py-16">
-        <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="bg-white shadow-lg rounded-lg p-6">
-            <h3 className="text-xl font-semibold text-blue-600">
-              Asset Overview
-            </h3>
-            <p className="mt-2 text-gray-600">
-              View your asset allocation at a glance.
-            </p>
+      {!tokenExists && (
+        <section className="py-16">
+          <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="bg-white shadow-lg rounded-lg p-6">
+              <h3 className="text-xl font-semibold text-blue-600">
+                Asset Overview
+              </h3>
+              <p className="mt-2 text-gray-600">
+                View your asset allocation at a glance.
+              </p>
+            </div>
+            <div className="bg-white shadow-lg rounded-lg p-6">
+              <h3 className="text-xl font-semibold text-blue-600">
+                Monitor Growth
+              </h3>
+              <p className="mt-2 text-gray-600">
+                Get a clear look at your portfolio performance over time.
+              </p>
+            </div>
+            <div className="bg-white shadow-lg rounded-lg p-6">
+              <h3 className="text-xl font-semibold text-blue-600">
+                Real-Time Updates
+              </h3>
+              <p className="mt-2 text-gray-600">
+                Stay informed with live updates on market trends.
+              </p>
+            </div>
           </div>
-          <div className="bg-white shadow-lg rounded-lg p-6">
-            <h3 className="text-xl font-semibold text-blue-600">
-              Monitor Growth
-            </h3>
-            <p className="mt-2 text-gray-600">
-              Get a clear look at your portfolio performance over time.
-            </p>
-          </div>
-          <div className="bg-white shadow-lg rounded-lg p-6">
-            <h3 className="text-xl font-semibold text-blue-600">
-              Real-Time Updates
-            </h3>
-            <p className="mt-2 text-gray-600">
-              Stay informed with live updates on market trends.
-            </p>
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {tokenExists && (
         <>
@@ -102,28 +106,34 @@ const Home = ({ tokenExists, assets, totalAssetValue, portfolioGrowth }) => {
           <section className="bg-blue-600 text-white py-16">
             <div className="text-center">
               <h2 className="text-4xl font-bold">Overview of Your Assets</h2>
-              <div className="max-w-6xl mx-auto grid grid-cols-1 gap-8 p-6">
-                <div className="">
-                  <p className="text-lg">Total Wealth Value</p>
-                  <p className="">${totalAssetValue}</p>
+              {assets.length > 0 ? (
+                <div className="max-w-6xl mx-auto grid grid-cols-1 gap-8 p-6">
+                  <div className="">
+                    <p className="text-lg">Total Wealth Value</p>
+                    <p className="">${totalAssetValue}</p>
+                  </div>
+                  <div className="">
+                    <p className="text-lg">
+                      Total Wealth Value by Asset Type
+                      <select
+                        value={selectedAssetType}
+                        onChange={handleSelectedTypeChange}
+                        id="asset types"
+                        className="ml-3 p-0 py-1 text-lg bg-transparent border-0 border-b-2 border-gray-200 appearance-none focus:outline-none focus:ring-0 focus:border-gray-200 peer"
+                      >
+                        {distinctAssetTypes.map((assetType, index) => (
+                          <option key={index}>{assetType}</option>
+                        ))}
+                      </select>
+                    </p>
+                    <p className="mt-2">${totalByType}</p>
+                  </div>
                 </div>
-                <div className="">
-                  <p className="text-lg">
-                    Total Wealth Value by Asset Type
-                    <select
-                      value={selectedAssetType}
-                      onChange={handleSelectedTypeChange}
-                      id="asset types"
-                      className="ml-3 p-0 py-1 text-lg bg-transparent border-0 border-b-2 border-gray-200 appearance-none focus:outline-none focus:ring-0 focus:border-gray-200 peer"
-                    >
-                      {distinctAssetTypes.map((assetType, index) => (
-                        <option key={index}>{assetType}</option>
-                      ))}
-                    </select>
-                  </p>
-                  <p className="mt-2">${totalByType}</p>
-                </div>
-              </div>
+              ) : (
+                <p className=" text-white mt-4 text-lg">
+                  No assets to show yet.
+                </p>
+              )}
             </div>
           </section>
 
@@ -134,26 +144,32 @@ const Home = ({ tokenExists, assets, totalAssetValue, portfolioGrowth }) => {
                 <h2 className="text-4xl font-bold text-blue-600">
                   Asset Allocation
                 </h2>
-                <div className="h-96 w-full">
-                  <ResponsiveContainer>
-                    <PieChart>
-                      <Pie
-                        data={assets}
-                        cx="50%"
-                        cy="50%"
-                        label
-                        dataKey="value"
-                        fill="#8884d8"
-                      >
-                        {assets?.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={randomColor()} />
-                        ))}
-                      </Pie>
-                      <Tooltip />
-                      <Legend />
-                    </PieChart>
-                  </ResponsiveContainer>
-                </div>
+                {assets.length > 0 ? (
+                  <div className="h-96 w-full">
+                    <ResponsiveContainer>
+                      <PieChart>
+                        <Pie
+                          data={assets}
+                          cx="50%"
+                          cy="50%"
+                          label
+                          dataKey="value"
+                          fill="#8884d8"
+                        >
+                          {assets?.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={randomColor()} />
+                          ))}
+                        </Pie>
+                        <Tooltip />
+                        <Legend />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </div>
+                ) : (
+                  <p className=" text-gray-600 my-4 text-lg">
+                    No assets to show yet.
+                  </p>
+                )}
               </div>
               <div className="mx-4 rounded-lg shadow-lg p-2">
                 <h2 className="text-4xl font-bold text-blue-600">
@@ -180,7 +196,7 @@ const Home = ({ tokenExists, assets, totalAssetValue, portfolioGrowth }) => {
                     </ResponsiveContainer>
                   </div>
                 ) : (
-                  <p className=" text-gray-600 mt-4 text-lg">
+                  <p className=" text-gray-600 my-4 text-lg">
                     No portfolio history to show yet.
                   </p>
                 )}

@@ -41,6 +41,7 @@ router.post("/login", async (req, res) => {
     if (!user) {
       console.log(`No user found with email: ${email}`);
       res.status(401).json({ message: "Email does not exist" });
+      return;
     }
     const password = req.body.password;
     const passwordMatch = await bcrypt.compare(password, user.password);

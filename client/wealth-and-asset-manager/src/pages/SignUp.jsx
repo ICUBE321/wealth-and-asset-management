@@ -7,9 +7,17 @@ const SignUp = ({ setToken }) => {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMode, setErrorMode] = useState(false); // determining the state of the form
+  const [errorMessage, setErrorMessage] = useState(""); // the error message to be displayed to the user when in error mode
   // for logging to server file
   const origin = "SignUp";
   let logMessage = "";
+
+  // for setting the error mode and message
+  const setError = (mode, message) => {
+    setErrorMode(mode);
+    setErrorMessage(message);
+  };
 
   // to make api call for creating a user and setting the returned jwt
   const createUser = async (e) => {
@@ -20,8 +28,13 @@ const SignUp = ({ setToken }) => {
         logMessage = "User entered invalid email";
         Log(origin, logMessage);
         console.log(`${origin} - ${logMessage}`);
+        // set error state for the form and display an error message
+        setError(true, logMessage);
         return;
       }
+
+      //reset error state after email validation if previously set to true
+      setError(false, "");
 
       //sign up
       const response = await axios.post(
@@ -41,9 +54,13 @@ const SignUp = ({ setToken }) => {
         console.log(`${origin} - ${logMessage}`);
       }
     } catch (error) {
-      logMessage = `Error creating an account: ${error}`;
+      console.log(error);
+      logMessage = `Error creating an account: ${
+        error.response.data.message ?? error.message
+      }`;
       Log(origin, logMessage);
       console.log(`${origin} - ${logMessage}`);
+      setError(true, logMessage);
     }
   };
 
@@ -54,15 +71,23 @@ const SignUp = ({ setToken }) => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <form className="max-w-md w-full bg-white p-6 rounded-lg shadow-md">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+      <form
+        className={`${
+          errorMode ? "bg-red-50" : "bg-white"
+        } max-w-md w-full p-6 rounded-lg shadow-md`}
+      >
         <div className="grid md:grid-cols-2 md:gap-6">
           <div className="relative z-0 w-full mb-5 group">
             <input
               type="text"
               name="floating_first_name"
               id="floating_first_name"
-              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+              className={`${
+                errorMode
+                  ? "text-red-600 border-red-300 focus:border-red-600"
+                  : "text-gray-900 border-gray-300 focus:border-blue-600"
+              } block py-2.5 px-0 w-full text-sm bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 peer`}
               placeholder=" "
               required
               value={firstName}
@@ -70,7 +95,11 @@ const SignUp = ({ setToken }) => {
             />
             <label
               htmlFor="floating_first_name"
-              className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+              className={`${
+                errorMode
+                  ? "text-red-700 peer-focus:text-red-600"
+                  : "text-gray-500 peer-focus:text-blue-600"
+              } peer-focus:font-medium absolute text-sm  duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6`}
             >
               First Name
             </label>
@@ -80,7 +109,11 @@ const SignUp = ({ setToken }) => {
               type="text"
               name="floating_last_name"
               id="floating_last_name"
-              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+              className={`${
+                errorMode
+                  ? "text-red-600 border-red-300 focus:border-red-600"
+                  : "text-gray-900 border-gray-300 focus:border-blue-600"
+              } block py-2.5 px-0 w-full text-sm bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 peer`}
               placeholder=" "
               required
               value={lastName}
@@ -88,7 +121,11 @@ const SignUp = ({ setToken }) => {
             />
             <label
               htmlFor="floating_last_name"
-              className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+              className={`${
+                errorMode
+                  ? "text-red-700 peer-focus:text-red-600"
+                  : "text-gray-500 peer-focus:text-blue-600"
+              } peer-focus:font-medium absolute text-sm  duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6`}
             >
               Last Name
             </label>
@@ -99,7 +136,11 @@ const SignUp = ({ setToken }) => {
             type="email"
             name="floating_email"
             id="floating_email"
-            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+            className={`${
+              errorMode
+                ? "text-red-600 border-red-300 focus:border-red-600"
+                : "text-gray-900 border-gray-300 focus:border-blue-600"
+            } block py-2.5 px-0 w-full text-sm bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 peer`}
             placeholder=" "
             required
             value={email}
@@ -107,7 +148,11 @@ const SignUp = ({ setToken }) => {
           />
           <label
             htmlFor="floating_email"
-            className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+            className={`${
+              errorMode
+                ? "text-red-700 peer-focus:text-red-600"
+                : "text-gray-500 peer-focus:text-blue-600"
+            } peer-focus:font-medium absolute text-sm  duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6`}
           >
             Email Address
           </label>
@@ -117,7 +162,11 @@ const SignUp = ({ setToken }) => {
             type="password"
             name="floating_password"
             id="floating_password"
-            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+            className={`${
+              errorMode
+                ? "text-red-600 border-red-300 focus:border-red-600"
+                : "text-gray-900 border-gray-300 focus:border-blue-600"
+            } block py-2.5 px-0 w-full text-sm bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 peer`}
             placeholder=" "
             required
             value={password}
@@ -125,7 +174,11 @@ const SignUp = ({ setToken }) => {
           />
           <label
             htmlFor="floating_password"
-            className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+            className={`${
+              errorMode
+                ? "text-red-700 peer-focus:text-red-600"
+                : "text-gray-500 peer-focus:text-blue-600"
+            } peer-focus:font-medium absolute text-sm  duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6`}
           >
             Password
           </label>
@@ -138,6 +191,24 @@ const SignUp = ({ setToken }) => {
           Create Account
         </button>
       </form>
+      {errorMode && (
+        <div
+          className="flex items-center p-4 mt-10 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800"
+          role="alert"
+        >
+          <svg
+            className="flex-shrink-0 inline w-4 h-4 me-3"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+          </svg>
+          <span className="sr-only">Info</span>
+          <div>{errorMessage}</div>
+        </div>
+      )}
     </div>
   );
 };
