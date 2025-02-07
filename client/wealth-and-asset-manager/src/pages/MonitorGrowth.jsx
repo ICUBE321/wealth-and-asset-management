@@ -10,7 +10,7 @@ import {
 } from "recharts";
 
 const MonitorGrowth = ({ portfolioGrowth }) => {
-  const comingSoon = import.meta.env.VITE_COMING_SOON_DEV;
+  const comingSoon = import.meta.env.VITE_COMING_SOON_PROD;
   const [netGain, setNetGain] = useState(0);
   // calculate the net gain
   useEffect(() => {
