@@ -1559,3 +1559,4 @@ server/.env
 client/.DS_Store
 .DS_Store
 client/wealth-and-asset-manager/.env
+server/test-data/user-data
