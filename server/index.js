@@ -25,7 +25,7 @@ app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // connect to database
-const mongoDbUri = process.env.MONGODB_URI_DEV;
+const mongoDbUri = process.env.MONGODB_URI_PROD;
 connectToDatabase(mongoDbUri);
 
 app.use("/logs", Logs);
