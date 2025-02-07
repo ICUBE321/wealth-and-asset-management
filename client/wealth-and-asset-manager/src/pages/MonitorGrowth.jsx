@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import {
   LineChart,
   Line,
@@ -10,7 +10,19 @@ import {
 } from "recharts";
 
 const MonitorGrowth = ({ portfolioGrowth }) => {
-  const comingSoon = import.meta.env.VITE_COMING_SOON;
+  const comingSoon = import.meta.env.VITE_COMING_SOON_DEV;
+  const [netGain, setNetGain] = useState(0);
+  // calculate the net gain
+  useEffect(() => {
+    const initialGrowth = portfolioGrowth.find(
+      (growth) => growth.isInitialValue
+    );
+    const currentGrowth = portfolioGrowth[portfolioGrowth.length - 1];
+    currentGrowth?.portfolioValue ??
+      setNetGain(currentGrowth.portfolioValue - initialGrowth.portfolioValue);
+    console.log(netGain);
+  }, []);
+
   return comingSoon == "true" ? (
     <div className="flex justify-center items-center text-gray-600">
       <h1>Coming soon.</h1>
@@ -36,7 +48,7 @@ const MonitorGrowth = ({ portfolioGrowth }) => {
           </div>
           <div>
             <h2 className="text-lg font-semibold text-gray-800">Net Gain</h2>
-            <p className="text-2xl font-bold text-blue-600">$5,000</p>
+            <p className="text-2xl font-bold text-blue-600">${netGain}</p>
           </div>
           <div>
             <h2 className="text-lg font-semibold text-gray-800">Best Month</h2>
