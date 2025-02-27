@@ -9,6 +9,7 @@ const userAuth = require("./user-auth/userAuth");
 const assetTracker = require("./asset-tracker/assetTracker");
 const monitorGrowth = require("./monitor-growth/monitorGrowth");
 const Logs = require("./logsUtil/logs");
+const csp = require("./conscious-spending-plan/csp");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -25,7 +26,7 @@ app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // connect to database
-const mongoDbUri = process.env.MONGODB_URI_PROD;
+const mongoDbUri = process.env.MONGODB_URI;
 connectToDatabase(mongoDbUri);
 
 app.use("/logs", Logs);
@@ -35,6 +36,8 @@ app.use("/userAuth", userAuth);
 app.use("/assettracker", assetTracker);
 
 app.use("/monitorGrowth", monitorGrowth);
+
+app.use("/csp", csp);
 
 app.get("/", (req, res) => {
   res.status(200).json("Welcome, your app is working well");
