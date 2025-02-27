@@ -41,7 +41,6 @@ router.post("/", async (req, res) => {
 // modify asset details
 router.post("/update", async (req, res) => {
   try {
-    // console.log(`request body: ${JSON.stringify(req.body)}`);
     const assetID = req.body.inputs.id;
     const newAsset = {
       name: req.body.inputs.name,
